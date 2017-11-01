@@ -108,6 +108,21 @@ Modular Styles
 Custom Styles
 ***************/
 
+@font-face {
+  font-family: "Gotham";
+  src: url('./assets/Gotham-Rounded-Book.ttf');
+}
+
+@font-face {
+  font-family: "Gotham-Light";
+  src: url('./assets/Gotham-Rounded-Light.ttf');
+}
+
+@font-face {
+  font-family: "Gotham-Medium";
+  src: url('./assets/Gotham-Rounded-Medium.ttf');
+}
+
 html, body, .container, .container-main {
   height: 100%;
 }
@@ -115,6 +130,16 @@ html, body, .container, .container-main {
 .container-main {
   display: flex;
   justify-content: center;
+  font-family: "Gotham";
+  
+
+  .bold {
+    font-family: "Gotham-Medium";
+  }
+
+  .light-font {
+    font-family: "Gotham-Light";
+  }
 
   .button-cta-green {
     display: inline-block;
