@@ -3,24 +3,14 @@
  */
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-// import YTSearch from 'youtube-api-search';
 
 /**
  * Import custom components
  */
-// import SearchBar from './components/search_bar';
-// import VideoList from './components/video_list';
-// import VideoDetail from './components/video_detail';
 import SearchBox from './components/search_box';
 import SearchResultList from './components/search_result_list';
 import styles from '../style/style.scss';
 
-
-/**
- * Youtube search apikey
- * @type {String}
- */
-// const API_KEY = 'AIzaSyBO2d_PYJ3aYobvnCa3naUmM3YJzn6pefE';
 /**
  * @description Main App class
  */
@@ -33,26 +23,47 @@ export class APP extends Component {
   constructor(props) {
     super(props);
 
-    // this.searchYoutube = this.searchYoutube.bind(this);
-    // this.changeSelectedVideo = this.changeSelectedVideo.bind(this);
+    this.searchRequest = this.searchRequest.bind(this);
+    this.clearResults = this.clearResults.bind(this);
+
     this.state = {
-      // videos: [],
-      // selectedVideo: null
+      results: [],
+      term: ''
     };
   }
 
-  // searchYoutube(term) {
-  //   YTSearch({key:API_KEY, term: term}, (data) => {
-  //     this.setState({
-  //         videos: data,
-  //         selectedVideo: data[0]
-  //     });
-  //   });
-  // }
+  /**
+   * Initiate search request and update state
+   * @param  {String} term [search term]
+   */
+  searchRequest({term, limit}) {
+    const URL = `https://itunes.apple.com/search?term=${term}&limit=${limit}`;
+    this.setState({
+      results: [],
+      term: term
+    });
 
-  // changeSelectedVideo(video) {
-  //   this.setState({ selectedVideo: video });
-  // }
+    if(term) {
+      fetch(URL, {
+        method: 'GET'
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        if (response && response.results) {
+          this.setState({results: response.results});
+        }
+      });
+    }
+  }
+
+  /**
+   * Empty results
+   */
+  clearResults() {
+    this.setState({results: []});
+  }
 
   /**
    * Creates a new component.
@@ -62,27 +73,22 @@ export class APP extends Component {
   render() {
     return (
       <div className="container-main">
-        {/* <SearchBar onSearchInput={this.searchYoutube} /> */}
-        {/* {
-          this.state.videos.length > 0
-          ?
+        {
+          this.state.results.length > 0 ?
           (
-            <div className="wrapper grouping">
-              <VideoDetail selectedVideo={this.state.selectedVideo}/>
-              <VideoList
-                videos={this.state.videos}
-                selectVideo={this.changeSelectedVideo}
-              />
-            </div>
-          )
-          :
+            <SearchResultList 
+              results={this.state.results}
+              clearResults={this.clearResults}
+              term={this.state.term}
+            />
+          ) 
+          : 
           (
-            <div className="loader">Loading...</div>
+            <SearchBox 
+              onSearch={this.searchRequest}
+            />
           )
-        } */}
-
-        {/* <SearchBox /> */}
-        <SearchResultList />
+        }
       </div>
     );
   }
