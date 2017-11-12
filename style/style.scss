@@ -243,7 +243,7 @@ html, body, .container, .container-main {
           .input-container {
             display: flex;
             justify-content: space-between;
-            padding-top: 10px;
+            padding-top: 20px;
 
             label {
               align-self: center;
@@ -262,7 +262,6 @@ html, body, .container, .container-main {
           .btn-container {
             justify-content: center;
             margin-left: 15px;
-            padding: 10px 25px;
           }
 
           div:first-child {
@@ -273,6 +272,54 @@ html, body, .container, .container-main {
         .form-heading {
           display: flex;
           justify-content: space-between;
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+  .search-list-container {
+    margin: 50px;
+
+    .heading-container {
+      
+      .heading {
+        font-size: 35px;
+
+        span {
+          font-size: 14px;
+          color: #6BA3A6;
+        }
+      }
+    }
+
+    .search-results-list {
+      margin-top: 50px;
+
+      .list-item {
+        margin-top: 25px;
+        
+        .list-item-container {
+          display: flex;
+          
+          img {
+            border-radius: 50%;
+            margin-bottom: 15px;
+          }
+          
+          .details-container {
+            margin-left: 20px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #EEE;
+            
+            .heading {
+              
+            }
+            
+            .sub-heading {
+              
+            }
+          }
         }
       }
     }
