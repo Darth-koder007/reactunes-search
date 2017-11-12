@@ -81,8 +81,8 @@ export class APP extends Component {
           )
         } */}
 
-        <SearchBox />
-        {/* <SearchResultList /> */}
+        {/* <SearchBox /> */}
+        <SearchResultList />
       </div>
     );
   }
