@@ -13,9 +13,85 @@ class SearchBox extends Component {
      * @param {Object} props
      */
     constructor(props) {
-    super(props);
+        super(props);
 
-    this.state = {};
+        this.onSearch = this.onSearch.bind(this);
+        this.handleUserInput = this.handleUserInput.bind(this);
+        this.validateField = this.validateField.bind(this);
+        this.validateForm = this.validateForm.bind(this);
+        this.showForm = this.showForm.bind(this);
+        this.resetForm = this.resetForm.bind(this);
+
+        this.state = {
+            term: null,
+            limit: null,
+            termValid: false,
+            limitValid: false,
+            formValid: false,
+            formSubmitted: false
+        };
+    }
+
+    onSearch(e) {
+        e.preventDefault();
+        this.setState({formSubmitted: true});
+        if (this.state.formValid) {
+            this.props.onSearch(this.state);
+        }
+    }
+
+    handleUserInput (e) {
+        const name = e.target.name;
+        const value = e.target.value;
+        this.setState({[name]: value});
+        this.validateField(name, value);
+        this.setState({formSubmitted: false});        
+    }
+
+    validateField(fieldName, value) {
+        let termValid = this.state.termValid;
+        let limitValid = this.state.limitValid;
+
+        switch(fieldName) {
+        case 'term':
+            termValid = /(jack)/i.test(value);
+            break;
+        case 'limit':
+            limitValid = /(4{1})/.test(value);
+            break;
+        default:
+            break;
+        }
+
+        this.setState(
+            {
+                termValid: termValid,
+                limitValid: limitValid
+            }, 
+            this.validateForm
+        );
+    }
+
+    validateForm() {
+        this.setState({formValid: this.state.limitValid && this.state.termValid});
+    }
+
+    resetForm() {
+        this.setState({
+            term: null,
+            limit: null,
+            termValid: false,
+            limitValid: false,
+            formValid: false,
+            formSubmitted: false
+        });
+
+        document.querySelector('.popup-box-container').style = 'display:none';
+    }
+
+    showForm(e) {
+        e.preventDefault();
+        document.querySelector('.popup-box-container').style = 'display:flex';
     }
 
     /**
@@ -30,7 +106,7 @@ class SearchBox extends Component {
                 {/* SEARCH BUTTON CTA START  */}
                 <div className="search-form-container">
                     <img className="arrow-icon" />
-                    <form className="search-form">
+                    <form className="search-form" onSubmit={this.showForm}>
                         <label className="heading">
                             Find your artist below
                         </label>
@@ -48,20 +124,34 @@ class SearchBox extends Component {
                     <div className="popup-box">
                         <div className="form-heading">
                             <p>Enter Search Criteria</p>
-                            <span>&#10005;</span>
+                            <span onClick={this.resetForm}>&#10005;</span>
                         </div>
-                        <form className="search-container">
+                        <form className="search-container" onSubmit={this.onSearch}>
                             <div className="input-container">
                                 <label>Artist Name</label>
-                                <input type="text" className="input-field" />
+                                <div className="input-field-container">
+                                    <input type="text" className="input-field" onInput={this.handleUserInput} name="term" />
+                                    {
+                                        this.state.formSubmitted && !this.state.termValid ? 
+                                        (<p className="error">Invalid Input</p>) : ''
+                                    }
+                                </div>
                             </div>
                             <div className="input-container">
                                 <label>No. of tracks</label>
-                                <input
-                                    type="number"
-                                    min="0"
-                                    className="input-field"
-                                />
+                                <div className="input-field-container">
+                                    <input
+                                        type="number"
+                                        min="0"
+                                        className="input-field"
+                                        onInput={this.handleUserInput}
+                                        name="limit"
+                                    />
+                                    {
+                                        this.state.formSubmitted && !this.state.limitValid ? 
+                                        (<p className="error">Invalid Input</p>) : ''                                   
+                                    }
+                                </div>
                             </div>
                             <div className="input-container btn-container">
                                 <button type="submit" className="btn-search button-cta-green">

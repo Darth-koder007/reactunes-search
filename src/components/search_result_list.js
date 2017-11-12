@@ -4,6 +4,9 @@
 
 import React, { Component } from 'react';
 
+import SearchListItem from './search_list_item';
+
+
  /**
   * Search result list class
   */
@@ -12,17 +15,38 @@ import React, { Component } from 'react';
       constructor(props) {
         super(props);
 
-        this.state = {};
+        this.renderListItem = this.renderListItem.bind(this);
+        this.clearResults = this.clearResults.bind(this);
+      }
+
+      renderListItem() {
+        const LIST = this.props.results.map((item) => {
+            const {artistName, trackName, artworkUrl100, shortDescription, trackId} = item;
+            
+            return (
+                <SearchListItem
+                    key={trackId}
+                    {... {artistName, trackName, artworkUrl100, shortDescription}}
+                />
+            );
+        });
+
+        return LIST;
+      }
+
+      clearResults () {
+          this.props.clearResults();
       }
 
       render() {
           return (
               <div className="search-list-container">
                 <div className="heading-container">
-                    <p className="heading">Search results for "Jack". <span>( clear )</span></p>
+                    <p className="heading">Search results for "{this.props.term}". <span onClick={this.clearResults}>( clear )</span></p>
                 </div>
                 <ul className="search-results-list">
-                    <li className="list-item">
+                {this.renderListItem()}
+                    {/* <li className="list-item">
                         <div className="list-item-container">
                             <img src="http://via.placeholder.com/150x150" />
                             <div className="details-container">
@@ -49,7 +73,7 @@ import React, { Component } from 'react';
                                 </p>
                             </div>
                         </div>
-                    </li>
+                    </li> */}
                 </ul>
               </div>
           );
